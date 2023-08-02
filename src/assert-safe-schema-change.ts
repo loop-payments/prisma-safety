@@ -3,15 +3,13 @@ import { readFile } from 'fs/promises';
 import { promisify } from 'util';
 
 import {
-  Field,
+  type Field,
+  type GroupedBlockAttribute,
+  type Model,
+  type BlockAttribute,
+  type Schema,
   getSchema,
-  GroupedBlockAttribute,
-  Model,
-  BlockAttribute,
-  Schema,
 } from '@mrleebo/prisma-ast';
-
-import { compactArray } from 'src/common/util/simple-types/array.util';
 
 export class UnsafeSchemaChangeError extends Error {
   constructor(issues: Issue[]) {
@@ -19,7 +17,7 @@ export class UnsafeSchemaChangeError extends Error {
       `Unsafe schema change:\n ${issues
         .map(
           (issue) =>
-            `"Diff "${compactArray([issue.model, issue.field]).join('.')}": ${
+            `"Diff "${[issue.model, issue.field].filter(Boolean).join('.')}": ${
               issue.message
             }`,
         )
@@ -34,14 +32,17 @@ type Issue = {
   message: string;
 };
 
-export async function assertSafeSchemaChange(baseSha: string) {
+export async function assertSafeSchemaChange(
+  schemaPath: string,
+  baseSha: string,
+) {
   const safeSha = baseSha.replace(/\W/g, '');
 
   const [currentSchema, previousSchema] = await Promise.all([
-    readFile('prisma/schema.prisma', { encoding: 'utf8' }).then((content) => {
+    readFile(schemaPath, { encoding: 'utf8' }).then((content) => {
       return getSchema(content);
     }),
-    promisify(exec)(`git show ${safeSha}:prisma/schema.prisma`).then(
+    promisify(exec)(`git show ${safeSha}:${schemaPath}`).then(
       ({ stdout, stderr }) => {
         if (stderr !== '') {
           throw new Error(`Unexpected stderr: ${stderr}`);
@@ -230,4 +231,3 @@ function attributesFromModel(
 
   return attributes;
 }
-

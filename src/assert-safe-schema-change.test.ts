@@ -1,10 +1,9 @@
-
 import { getSchema } from '@mrleebo/prisma-ast';
 
 import {
   assertSafeSchemaChangeBasedOnSchemas,
   UnsafeSchemaChangeError,
-} from './assert-safe-schema-change';
+} from '#src/assert-safe-schema-change.js';
 
 describe('safe schema change', () => {
   describe('assertSafeSchemaChange', () => {
@@ -170,4 +169,3 @@ describe('safe schema change', () => {
     });
   });
 });
-
