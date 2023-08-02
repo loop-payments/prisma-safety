@@ -11,13 +11,13 @@ import {
   getSchema,
 } from '@mrleebo/prisma-ast';
 
-type Issue = {
+type SafetyIssue = {
   model: string;
   field?: string;
   message: string;
 };
 
-export function renderIssue(issue: Issue[]) {
+export function renderSafetyIssues(issue: SafetyIssue[]) {
   return issue
     .map(
       (issue) =>
@@ -28,7 +28,10 @@ export function renderIssue(issue: Issue[]) {
     .join('\n');
 }
 
-export async function listSafetyIssues(schemaPath: string, baseSha: string) {
+export async function listSafetyIssues(
+  schemaPath: string,
+  baseSha: string,
+): Promise<SafetyIssue[]> {
   const safeSha = baseSha.replace(/\W/g, '');
 
   const [currentSchema, previousSchema] = await Promise.all([
@@ -46,13 +49,13 @@ export async function listSafetyIssues(schemaPath: string, baseSha: string) {
     ),
   ]);
 
-  listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
+  return listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
 }
 
 export function listSafetyIssuesBasedOnSchemas(
   previousSchema: Schema,
   currentSchema: Schema,
-): Issue[] {
+): SafetyIssue[] {
   const allIssues = [];
   const currentTables = tablesFromSchema(currentSchema);
 

@@ -1,6 +1,6 @@
 # prisma-safety
 
-A safe schema change checker for Prisma. It errors if a model is deleted without previously having been marked `@@ignore` or a field is deleted without previously having been marked `@ignore`.
+A safe schema change checker for Prisma. Errors if a model is deleted without previously having been marked `@@ignore` or a field is deleted without previously having been marked `@ignore`.
 
 ## Installation
 
@@ -22,7 +22,18 @@ The arguments can be globs, directories, or file paths. The default path is `pri
 
 Run `yarn prisma-safety --help` for all options.
 
+### CLI
+
+Example usage locally from CLI:
+
+```sh
+> yarn prisma-safety d282130914405c7055a360834229dc5ae00fbc73
+Unsafe change to "LineItem.invoiceId": Expected deleted field to have been marked with @ignore prior to delete.
+```
+
 ### GitHub Actions
+
+Example usage in GitHub Actions:
 
 ```yaml
 jobs:

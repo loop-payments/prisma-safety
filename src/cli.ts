@@ -2,7 +2,7 @@
 
 import { program } from 'commander';
 
-import { listSafetyIssues } from '#src/assert-safe-schema-change.js';
+import { listSafetyIssues, renderSafetyIssues } from '#src/prisma-safety.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
@@ -26,10 +26,11 @@ const { args } = program;
 const run = async () => {
   const schemaPath = options.schema;
   const baseSha = args[0];
-  listSafetyIssues(schemaPath, baseSha).catch((e) => {
-    console.error(e);
+  const safetyIssues = await listSafetyIssues(schemaPath, baseSha);
+  if (safetyIssues.length > 0) {
+    console.error(renderSafetyIssues(safetyIssues));
     process.exit(1);
-  });
+  }
 };
 
 run().catch((err) => {

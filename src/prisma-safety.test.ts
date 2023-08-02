@@ -1,8 +1,8 @@
 import { getSchema } from '@mrleebo/prisma-ast';
 
-import { listSafetyIssuesBasedOnSchemas } from '#src/assert-safe-schema-change.js';
+import { listSafetyIssuesBasedOnSchemas } from '#src/prisma-safety.js';
 
-describe('safe schema change', () => {
+describe('prisma safety', () => {
   describe('listSafetyIssuesBasedOnSchemas', () => {
     describe('unsafe', () => {
       it('disallows fields deleted from table without being ignored', () => {
