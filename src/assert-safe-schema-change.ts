@@ -11,31 +11,24 @@ import {
   getSchema,
 } from '@mrleebo/prisma-ast';
 
-export class UnsafeSchemaChangeError extends Error {
-  constructor(issues: Issue[]) {
-    super(
-      `Unsafe schema change:\n ${issues
-        .map(
-          (issue) =>
-            `"Diff "${[issue.model, issue.field].filter(Boolean).join('.')}": ${
-              issue.message
-            }`,
-        )
-        .join('\n')}`,
-    );
-  }
-}
-
 type Issue = {
   model: string;
   field?: string;
   message: string;
 };
 
-export async function assertSafeSchemaChange(
-  schemaPath: string,
-  baseSha: string,
-) {
+export function renderIssue(issue: Issue[]) {
+  return issue
+    .map(
+      (issue) =>
+        `Unsafe change to "${[issue.model, issue.field]
+          .filter(Boolean)
+          .join('.')}": ${issue.message}`,
+    )
+    .join('\n');
+}
+
+export async function listSafetyIssues(schemaPath: string, baseSha: string) {
   const safeSha = baseSha.replace(/\W/g, '');
 
   const [currentSchema, previousSchema] = await Promise.all([
@@ -53,13 +46,13 @@ export async function assertSafeSchemaChange(
     ),
   ]);
 
-  assertSafeSchemaChangeBasedOnSchemas(previousSchema, currentSchema);
+  listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
 }
 
-export function assertSafeSchemaChangeBasedOnSchemas(
+export function listSafetyIssuesBasedOnSchemas(
   previousSchema: Schema,
   currentSchema: Schema,
-) {
+): Issue[] {
   const allIssues = [];
   const currentTables = tablesFromSchema(currentSchema);
 
@@ -126,9 +119,7 @@ export function assertSafeSchemaChangeBasedOnSchemas(
     }),
   );
 
-  if (allIssues.length > 0) {
-    throw new UnsafeSchemaChangeError(allIssues);
-  }
+  return allIssues;
 }
 
 function tablesFromSchema(schema: Schema): Map<string, Model> {

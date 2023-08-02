@@ -1,14 +1,11 @@
 import { getSchema } from '@mrleebo/prisma-ast';
 
-import {
-  assertSafeSchemaChangeBasedOnSchemas,
-  UnsafeSchemaChangeError,
-} from '#src/assert-safe-schema-change.js';
+import { listSafetyIssuesBasedOnSchemas } from '#src/assert-safe-schema-change.js';
 
 describe('safe schema change', () => {
-  describe('assertSafeSchemaChange', () => {
+  describe('listSafetyIssuesBasedOnSchemas', () => {
     describe('unsafe', () => {
-      it('throws when fields deleted from table without being ignored', () => {
+      it('disallows fields deleted from table without being ignored', () => {
         const prev = getSchema(`model Foo {
           qid String @id
           bar String @map(name: "bar")
@@ -16,12 +13,10 @@ describe('safe schema change', () => {
         const current = getSchema(`model Foo {
           qid String @id
         }`);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).toThrowError(UnsafeSchemaChangeError);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
       });
 
-      it('throws when fields renamed in table without being ignored', () => {
+      it('disallows fields renamed in table without being ignored', () => {
         const prev = getSchema(`model Foo {
           qid String @id
           bar String @map(name: "bar")
@@ -30,12 +25,10 @@ describe('safe schema change', () => {
           qid String @id
           baz String @map(name: "bar") @ignore
         }`);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).toThrowError(UnsafeSchemaChangeError);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
       });
 
-      it('throws when table is deleted without being ignored', () => {
+      it('disallows table is deleted without being ignored', () => {
         const prev = getSchema(`
           model Foo {
             qid String @id
@@ -51,9 +44,7 @@ describe('safe schema change', () => {
             bar String @map(name: "bar")
           }
         `);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).toThrowError(UnsafeSchemaChangeError);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
       });
     });
 
@@ -66,9 +57,7 @@ describe('safe schema change', () => {
         const current = getSchema(`model Foo {
           qid String @id
         }`);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
       it('allows moving existing field within model', () => {
@@ -80,9 +69,7 @@ describe('safe schema change', () => {
           bar String @map(name: "bar")
           qid String @id
         }`);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
       it('allows renaming field that was marked as ignored', () => {
@@ -94,9 +81,7 @@ describe('safe schema change', () => {
           qid String @id
           baz String @map(name: "baz")
         }`);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
       it('allows deleting relations', () => {
@@ -120,9 +105,7 @@ describe('safe schema change', () => {
           qid String @id
         }
       `);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
       it('ignores if comment', () => {
@@ -140,9 +123,7 @@ describe('safe schema change', () => {
             bar String @map(name: "bar")
           }
         `);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
       it('allows deleting table that was ignored', () => {
@@ -162,9 +143,7 @@ describe('safe schema change', () => {
             bar String @map(name: "bar")
           }
         `);
-        expect(() =>
-          assertSafeSchemaChangeBasedOnSchemas(prev, current),
-        ).not.toThrow();
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
     });
   });

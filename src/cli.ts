@@ -2,7 +2,7 @@
 
 import { program } from 'commander';
 
-import { assertSafeSchemaChange } from '#src/assert-safe-schema-change.js';
+import { listSafetyIssues } from '#src/assert-safe-schema-change.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
@@ -26,7 +26,7 @@ const { args } = program;
 const run = async () => {
   const schemaPath = options.schema;
   const baseSha = args[0];
-  assertSafeSchemaChange(schemaPath, baseSha).catch((e) => {
+  listSafetyIssues(schemaPath, baseSha).catch((e) => {
     console.error(e);
     process.exit(1);
   });
