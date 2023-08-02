@@ -45,8 +45,7 @@ jobs:
           node-version: '18.13.0'
           cache: 'yarn'
       - run: yarn
-      # Ensure no unsafe Prisma schema changes have been made.
-      - name: Assert safe Prisma schema change
+      - name: Check Prisma schema change safety
         run: |
           # Even though we don't diff again main's HEAD, we need to fetch it
           # because the base SHA is not fetched as part of the shallow clone
