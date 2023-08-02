@@ -10,7 +10,7 @@ program
   .name('prisma-safety')
   .description('A safe migration checker for Prisma schema files.')
   .option(
-    '-s, --schema',
+    '-s, --schema <path>',
     'The path to the Prisma schema file.',
     DEFAULT_PRISMA_FILE_PATH,
   )
