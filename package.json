@@ -1,6 +1,6 @@
 {
   "name": "prisma-safety",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A safe migration checker for Prisma.",
   "repository": {
     "type": "git",
