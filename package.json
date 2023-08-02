@@ -40,7 +40,7 @@
     "@types/pluralize": "^0.0.30",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.41.0",
+    "eslint": "^8.46.0",
     "eslint-config-prettier": "^8.9.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-canonical": "^4.9.0",
