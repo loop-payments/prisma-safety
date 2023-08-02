@@ -1,6 +1,6 @@
 # prisma-safety
 
-A safe migration checker for Prisma schema files.
+A safe schema change checker for Prisma. It errors if a model is deleted without previously having been marked `@@ignore` or a field is deleted without previously having been marked `@ignore`.
 
 ## Installation
 
@@ -22,11 +22,11 @@ The arguments can be globs, directories, or file paths. The default path is `pri
 
 Run `yarn prisma-safety --help` for all options.
 
-### In GitHub Actions
+### GitHub Actions
 
 ```yaml
 jobs:
-  check-non-eslint-style:
+  prisma-safety:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -43,3 +43,8 @@ jobs:
           git fetch origin main
           yarn prisma-safety ${{ github.event.pull_request.base.sha }}
 ```
+
+## Inspiration
+
+- https://github.com/prisma/prisma/discussions/13922
+- https://github.com/ankane/strong_migrations
