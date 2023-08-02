@@ -13,14 +13,14 @@ A safe schema change checker for Prisma. Errors if a model is deleted without pr
 ## Usage
 
 ```sh
-> npx prisma-safety path/to/schema.prisma
+> npx prisma-safety <base-sha>
 # or
-> yarn prisma-safety path/to/schema.prisma
+> yarn prisma-safety <base-sha>
 ```
 
-The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+A schema file path can be specified with the `-s, --schema` option. The default path is `prisma/schema.prisma`.
 
-Run `yarn prisma-safety --help` for all options.
+Run `yarn prisma-safety --help` for more.
 
 ### CLI
 
