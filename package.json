@@ -19,25 +19,17 @@
   ],
   "scripts": {
     "build": "tsc",
-    "docs": "node ./scripts/generate-docs.js",
     "bump-version": "node ./scripts/bump-version.js",
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
     "style:prettier": "prettier --write src",
     "style:prettier:check": "prettier --check src",
-    "test": "node ./node_modules/jest/bin/jest.js",
-    "test:cli:invalid": "dist/cli.js fixture/invalid.prisma"
+    "test": "node ./node_modules/jest/bin/jest.js"
   },
   "dependencies": {
-    "@kejistan/enum": "^0.0.2",
     "@mrleebo/prisma-ast": "^0.7.0",
-    "chalk": "^5.2.0",
-    "commander": "^11.0.0",
-    "cosmiconfig": "^8.1.3",
-    "glob": "^10.2.6",
-    "pluralize": "^8.0.0",
-    "zod": "^3.21.4"
+    "commander": "^11.0.0"
   },
   "devDependencies": {
     "@tsconfig/esm": "^1.0.3",

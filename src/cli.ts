@@ -1,33 +1,22 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-
-import chalk from 'chalk';
 import { program } from 'commander';
-import { cosmiconfig } from 'cosmiconfig';
-import { glob } from 'glob';
 
-import { parseRules } from '#src/common/parse-rules.js';
-import { renderViolations } from '#src/common/render.js';
-import { lintPrismaFiles } from '#src/lint-prisma-files.js';
-import ruleDefinitions from '#src/rule-definitions.js';
+import { listSafetyIssues, renderSafetyIssues } from '#src/prisma-safety.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
 program
   .name('prisma-safety')
   .description('A safe migration checker for Prisma schema files.')
-  .option('-s, --schema', 'The path to the Prisma schema file.',
-    DEFAULT_PRISMA_FILE_PATH)
-  .argument(
-    'baseSha',
-    'The baseSha to diff the current schema against.',
-  );
+  .option(
+    '-s, --schema',
+    'The path to the Prisma schema file.',
+    DEFAULT_PRISMA_FILE_PATH,
+  )
+  .argument('baseSha', 'The baseSha to diff the current schema against.');
 
 program.parse();
-
-const explorer = cosmiconfig('prismalint');
 
 const options = program.opts();
 const { args } = program;
@@ -35,12 +24,13 @@ const { args } = program;
 /* eslint-disable no-console */
 
 const run = async () => {
-  assertSafeSchemaChange(arg).catch((e) => {
-    // eslint-disable-next-line no-console
-    console.error(e);
+  const schemaPath = options.schema;
+  const baseSha = args[0];
+  const safetyIssues = await listSafetyIssues(schemaPath, baseSha);
+  if (safetyIssues.length > 0) {
+    console.error(renderSafetyIssues(safetyIssues));
     process.exit(1);
-
-  });
+  }
 };
 
 run().catch((err) => {
