@@ -2,6 +2,10 @@
 
 A safe schema change checker for Prisma. Errors if a model is deleted without previously having been marked `@@ignore` or a field is deleted without previously having been marked `@ignore`.
 
+## Motivation
+
+<https://github.com/prisma/prisma/discussions/13922>
+
 ## Installation
 
 ```sh
@@ -53,8 +57,3 @@ jobs:
           git fetch origin main
           yarn prisma-safety ${{ github.event.pull_request.base.sha }}
 ```
-
-## Inspiration
-
-- https://github.com/prisma/prisma/discussions/13922
-- https://github.com/ankane/strong_migrations

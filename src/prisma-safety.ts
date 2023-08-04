@@ -17,8 +17,8 @@ type SafetyIssue = {
   message: string;
 };
 
-export function renderSafetyIssues(issue: SafetyIssue[]) {
-  return issue
+export function renderSafetyIssues(issues: SafetyIssue[]) {
+  return issues
     .map(
       (issue) =>
         `Unsafe change to "${[issue.model, issue.field]
