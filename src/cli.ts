@@ -30,11 +30,14 @@ const getSchemaPath = async () => {
   const schemaFromOption = options.schema;
   if (schemaFromOption) {
     return schemaFromOption;
-  } else if (!schemaFromOption) {
-    return getSchemaFromPackageJson(process.cwd());
-  } else {
-    return DEFAULT_PRISMA_FILE_PATH;
   }
+
+  const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
+  if (schemaFromPackageJson) {
+    return schemaFromPackageJson;
+  }
+
+  return DEFAULT_PRISMA_FILE_PATH;
 };
 
 const run = async () => {
