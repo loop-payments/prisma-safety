@@ -1,6 +1,6 @@
 {
   "name": "prisma-safety",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A safe migration checker for Prisma.",
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "@mrleebo/prisma-ast": "^0.7.0",
-    "commander": "^11.0.0"
+    "commander": "^11.0.0",
+    "read-pkg-up": "^10.1.0"
   },
   "devDependencies": {
     "@tsconfig/esm": "^1.0.3",
