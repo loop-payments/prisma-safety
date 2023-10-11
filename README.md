@@ -54,6 +54,6 @@ jobs:
           # Even though we don't diff again main's HEAD, we need to fetch it
           # because the base SHA is not fetched as part of the shallow clone
           # GitHub Actions uses to fetch the PR branch HEAD.
-          git fetch origin main
+          git fetch origin ${{ github.base_ref }}
           yarn prisma-safety ${{ github.event.pull_request.base.sha }}
 ```
