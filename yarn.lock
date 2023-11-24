@@ -5519,7 +5519,7 @@ __metadata:
     jest: ^29.3.1
     lint-staged: ^15.0.1
     prettier: 3.1.0
-    read-pkg-up: ^11.0.0
+    read-package-up: ^11.0.0
     ts-jest: ^29.1.0
     typescript: ^5.0.4
   bin:
@@ -5589,14 +5589,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"read-pkg-up@npm:^11.0.0":
+"read-package-up@npm:^11.0.0":
   version: 11.0.0
-  resolution: "read-pkg-up@npm:11.0.0"
+  resolution: "read-package-up@npm:11.0.0"
   dependencies:
     find-up-simple: ^1.0.0
     read-pkg: ^9.0.0
     type-fest: ^4.6.0
-  checksum: c08fe324a6d8cb3f1f4533074db8a4ef222c85af74bc30e7a98117c578e5d6b2dd8868fded660386167c95ffaf5d566f95743a621581df332573bc989c19cf45
+  checksum: 535b7554d47fae5fb5c2e7aceebd48b5de4142cdfe7b21f942fa9a0f56db03d3b53cce298e19438e1149292279c285e6ba6722eca741d590fd242519c4bdbc17
   languageName: node
   linkType: hard
 
