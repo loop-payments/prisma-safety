@@ -2,7 +2,7 @@
 
 import { program } from 'commander';
 
-import { readPackageUp } from 'read-pkg-up';
+import { readPackageUp } from 'read-package-up';
 
 import { listSafetyIssues, renderSafetyIssues } from '#src/prisma-safety.js';
 
