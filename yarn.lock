@@ -1005,12 +1005,12 @@ __metadata:
   linkType: hard
 
 "@mrleebo/prisma-ast@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@mrleebo/prisma-ast@npm:0.10.0"
+  version: 0.10.1
+  resolution: "@mrleebo/prisma-ast@npm:0.10.1"
   dependencies:
     chevrotain: ^10.5.0
     lilconfig: ^2.1.0
-  checksum: 0a3310d22a9ddc0372f243c83000009d464e2105fd7b1e7930c82228f8b76a9df73ffb3dd53eec4f4e88019ce11ef9e80b3e964822af307912a1b3db5a13b2d9
+  checksum: 44eb4d96f4dd98c6f793de5a9eface66b97a752feec6298f559d65e4829c29fdde9a4a2a93e9273b0bed06c76fedf650fa0b26c4634687f5980dc22b00f1376b
   languageName: node
   linkType: hard
 
