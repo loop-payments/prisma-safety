@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@mrleebo/prisma-ast": "^0.10.0",
-    "commander": "^11.0.0",
+    "commander": "^12.0.0",
     "read-package-up": "^11.0.0"
   },
   "devDependencies": {
