@@ -1004,13 +1004,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mrleebo/prisma-ast@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@mrleebo/prisma-ast@npm:0.11.0"
+"@mrleebo/prisma-ast@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@mrleebo/prisma-ast@npm:0.12.0"
   dependencies:
     chevrotain: ^10.5.0
     lilconfig: ^2.1.0
-  checksum: 11f2ccf8fec5cbbb5290d46e886e03190e3d56739b253ad0dcce09c993607975fdf666c69ff1d6ba4d09017cf7b0983381550d9394d63b01f24a2244f50e6c79
+  checksum: 4fed49c14a4abfaabc2aa31eaa5340b56ce373d2138d8cebe320ef35d197032281495fe9041cf3a10793edd9e1fb3389bd244317e2d1e357d167624a61743120
   languageName: node
   linkType: hard
 
@@ -5480,7 +5480,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "prisma-safety@workspace:."
   dependencies:
-    "@mrleebo/prisma-ast": ^0.11.0
+    "@mrleebo/prisma-ast": ^0.12.0
     "@tsconfig/esm": ^1.0.3
     "@tsconfig/node18": ^18.2.0
     "@tsconfig/strictest": ^2.0.1
