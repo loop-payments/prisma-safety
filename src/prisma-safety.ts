@@ -153,13 +153,11 @@ function tablesFromSchema(schema: Schema): Map<string, Model> {
   const tables = new Map();
   for (const block of schema.list) {
     if (block.type === 'model') {
-      const tableName = getMappedTableName(block);
-      // Prefer mapped name as table identifier if it exists.
-      if (tableName) {
-        tables.set(tableName, block);
-      } else {
-        tables.set(block.name, block);
-      }
+      const mappedName = getMappedTableName(block);
+      // For safety considerations, what matters is the actual table
+      // name, not the model name (used for generated code).
+      const tableName = mappedName ?? block.name;
+      tables.set(tableName, block);
     }
   }
 
