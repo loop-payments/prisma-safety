@@ -53,26 +53,6 @@ export async function listSafetyIssues(
   return listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
 }
 
-const getMappedTableName = (model: Model) => {
-  // Get the attribute property for the table mapping.
-  const dbMapping = model.properties?.find((p) => p.type === 'attribute' && p.name === 'map') as BlockAttribute;
-  if (!dbMapping) {
-    return false;
-  }
-  // Get the table name from the attribute property.
-  const dbMappingName = dbMapping.args?.find((a) => a.type === 'attributeArgument')?.value as KeyValue;
-  return dbMappingName?.value;
-}
-
-const newModelWithSameDbMapping = (model: Model, addedModels: Model[]) => {
-  const previousTableName = getMappedTableName(model);
-  if (!previousTableName) {
-    return false;
-  }
-  const newTableNames = addedModels.map((m) => getMappedTableName(m));
-  return newTableNames.includes(previousTableName);
-}
-
 export function listSafetyIssuesBasedOnSchemas(
   previousSchema: Schema,
   currentSchema: Schema,
@@ -88,8 +68,7 @@ export function listSafetyIssuesBasedOnSchemas(
       const ignoreAttr = attributesFromModel(model).find(
         ({ name }) => name === 'ignore',
       );
-      // Allow model name changes when the same database mapping is used.
-      if (!ignoreAttr && !newModelWithSameDbMapping(model, tableChanges.added)) {
+      if (!ignoreAttr) {
         issues.push({
           model: model.name,
           message:
@@ -147,11 +126,40 @@ export function listSafetyIssuesBasedOnSchemas(
   return allIssues;
 }
 
+const getMappedTableName = (model: Model) => {
+  // Get the attribute property for the table mapping.
+  const dbMapping = model?.properties?.find(
+    (p) => p.type === 'attribute' && p.name === 'map',
+  ) as BlockAttribute;
+  if (!dbMapping) {
+    return null;
+  }
+  // Get the table name from the attribute property.
+  const dbMappingName = dbMapping.args?.find(
+    (a) => a.type === 'attributeArgument',
+  )?.value as KeyValue;
+  return dbMappingName?.value;
+};
+
+/**
+ *
+ * @param schema
+ * @returns Map of table or model name to block
+ * We prefer the mapped table name as the table identifier if it exists.
+ * Otherwise, we use the model name as the identifier.
+ * This is useful for cases where the table mapping doesn't change, but the model name does.
+ */
 function tablesFromSchema(schema: Schema): Map<string, Model> {
   const tables = new Map();
   for (const block of schema.list) {
     if (block.type === 'model') {
-      tables.set(block.name, block);
+      const tableName = getMappedTableName(block);
+      // Prefer mapped name as table identifier if it exists.
+      if (tableName) {
+        tables.set(tableName, block);
+      } else {
+        tables.set(block.name, block);
+      }
     }
   }
 
