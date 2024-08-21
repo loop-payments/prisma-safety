@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.5 (2024-08-21)
+
 - Use mapped table name (when present) to match old and new models for detecting changes.
 
 ## 0.0.4 (2023-08-23)
