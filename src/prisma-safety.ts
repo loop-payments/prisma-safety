@@ -9,6 +9,7 @@ import {
   type BlockAttribute,
   type Schema,
   getSchema,
+  KeyValue,
 } from '@mrleebo/prisma-ast';
 
 type SafetyIssue = {
@@ -52,6 +53,26 @@ export async function listSafetyIssues(
   return listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
 }
 
+const getMappedTableName = (model: Model) => {
+  // Get the attribute property for the table mapping.
+  const dbMapping = model.properties?.find((p) => p.type === 'attribute' && p.name === 'map') as BlockAttribute;
+  if (!dbMapping) {
+    return false;
+  }
+  // Get the table name from the attribute property.
+  const dbMappingName = dbMapping.args?.find((a) => a.type === 'attributeArgument')?.value as KeyValue;
+  return dbMappingName?.value;
+}
+
+const newModelWithSameDbMapping = (model: Model, addedModels: Model[]) => {
+  const previousTableName = getMappedTableName(model);
+  if (!previousTableName) {
+    return false;
+  }
+  const newTableNames = addedModels.map((m) => getMappedTableName(m));
+  return newTableNames.includes(previousTableName);
+}
+
 export function listSafetyIssuesBasedOnSchemas(
   previousSchema: Schema,
   currentSchema: Schema,
@@ -67,7 +88,8 @@ export function listSafetyIssuesBasedOnSchemas(
       const ignoreAttr = attributesFromModel(model).find(
         ({ name }) => name === 'ignore',
       );
-      if (!ignoreAttr) {
+      // Allow model name changes when the same database mapping is used.
+      if (!ignoreAttr && !newModelWithSameDbMapping(model, tableChanges.added)) {
         issues.push({
           model: model.name,
           message:
