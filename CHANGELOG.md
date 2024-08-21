@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Default to mapped table name instead of model name for identifying prisma models.  
+- Use mapped table name (when present) to match old and new models for detecting changes.
 
 ## 0.0.4 (2023-08-23)
 
