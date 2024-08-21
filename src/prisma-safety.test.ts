@@ -182,7 +182,7 @@ describe('prisma safety', () => {
         expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
 
-      it('allows schema name change if the mapped table name is the same', () => {
+      it('allows model name change if the mapped table name is the same', () => {
         const prev = getSchema(`
           model Foo {
             qid String @id
