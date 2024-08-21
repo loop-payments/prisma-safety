@@ -9,7 +9,7 @@ import {
   type BlockAttribute,
   type Schema,
   getSchema,
-  KeyValue,
+  type KeyValue,
 } from '@mrleebo/prisma-ast';
 
 type SafetyIssue = {
