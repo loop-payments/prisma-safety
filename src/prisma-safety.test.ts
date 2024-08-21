@@ -46,6 +46,42 @@ describe('prisma safety', () => {
         `);
         expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
       });
+
+      it('disallows model name change if the mapped table name is not the same', () => {
+        const prev = getSchema(`
+          model Foo {
+            qid String @id
+            bar String @map(name: "bar")
+            @@map(name: "foo")
+          }
+        `);
+        const current = getSchema(`
+          model Bar {
+            qid String @id
+            bar String @map(name: "bar")
+            @@map(name: "bar")
+          }
+        `);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
+      });
+
+      it('disallows field name change if missing ignore and the mapped table name is the same', () => {
+        const prev = getSchema(`
+          model Foo {
+            qid String @id
+            bar String @map(name: "bar")
+            @@map(name: "foo")
+          }
+        `);
+        const current = getSchema(`
+          model Bar {
+            qid String @id
+            baz String @map(name: "bar")
+            @@map(name: "foo")
+          }
+        `);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
+      });
     });
 
     describe('safe', () => {
@@ -141,6 +177,42 @@ describe('prisma safety', () => {
           model Foo {
             qid String @id
             bar String @map(name: "bar")
+          }
+        `);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+      });
+
+      it('allows model name change if the mapped table name is the same', () => {
+        const prev = getSchema(`
+          model Foo {
+            qid String @id
+            bar String @map(name: "bar")
+            @@map(name: "foo")
+          }
+        `);
+        const current = getSchema(`
+          model Bar {
+            qid String @id
+            bar String @map(name: "bar")
+            @@map(name: "foo")
+          }
+        `);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+      });
+
+      it('allows field name change with ignore and the mapped table name is the same', () => {
+        const prev = getSchema(`
+          model Foo {
+            qid String @id
+            bar String @map(name: "bar") @ignore
+            @@map(name: "foo")
+          }
+        `);
+        const current = getSchema(`
+          model Bar {
+            qid String @id
+            baz String @map(name: "bar")
+            @@map(name: "foo")
           }
         `);
         expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);

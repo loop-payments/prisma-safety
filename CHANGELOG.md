@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use mapped table name (when present) to match old and new models for detecting changes.
+
 ## 0.0.4 (2023-08-23)
 
 - Add support for reading prisma schema configuration from `package.json`.

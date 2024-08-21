@@ -9,6 +9,7 @@ import {
   type BlockAttribute,
   type Schema,
   getSchema,
+  type KeyValue,
 } from '@mrleebo/prisma-ast';
 
 type SafetyIssue = {
@@ -125,11 +126,38 @@ export function listSafetyIssuesBasedOnSchemas(
   return allIssues;
 }
 
+const getMappedTableName = (model: Model) => {
+  // Get the attribute property for the table mapping.
+  const dbMapping = model?.properties?.find(
+    (p) => p.type === 'attribute' && p.name === 'map',
+  ) as BlockAttribute;
+  if (!dbMapping) {
+    return null;
+  }
+  // Get the table name from the attribute property.
+  const dbMappingName = dbMapping.args?.find(
+    (a) => a.type === 'attributeArgument',
+  )?.value as KeyValue;
+  return dbMappingName?.value;
+};
+
+/**
+ *
+ * @param schema
+ * @returns Map of table or model name to block
+ * We prefer the mapped table name as the table identifier if it exists.
+ * Otherwise, we use the model name as the identifier.
+ * This is useful for cases where the table mapping doesn't change, but the model name does.
+ */
 function tablesFromSchema(schema: Schema): Map<string, Model> {
   const tables = new Map();
   for (const block of schema.list) {
     if (block.type === 'model') {
-      tables.set(block.name, block);
+      const mappedName = getMappedTableName(block);
+      // For safety considerations, what matters is the actual table
+      // name, not the model name (used for generated code).
+      const tableName = mappedName ?? block.name;
+      tables.set(tableName, block);
     }
   }
 
