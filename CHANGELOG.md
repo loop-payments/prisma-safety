@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.0.6 (2024-10-22)
+
+- Use model name instead of mapped table name (if present) for determining if field is a relation.
+
 ## 0.0.5 (2024-08-21)
 
 - Use mapped table name (when present) to match old and new models for detecting changes.

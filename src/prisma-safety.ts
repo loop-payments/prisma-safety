@@ -58,7 +58,7 @@ export function listSafetyIssuesBasedOnSchemas(
   currentSchema: Schema,
 ): SafetyIssue[] {
   const allIssues = [];
-  const currentTables = tablesFromSchema(currentSchema);
+  const currentModels = modelsFromSchema(currentSchema);
 
   const tableChanges = diffModels(previousSchema, currentSchema);
   allIssues.push(
@@ -82,7 +82,7 @@ export function listSafetyIssuesBasedOnSchemas(
 
   const isFieldARelation = (field: Field): boolean => {
     if (typeof field.fieldType === 'string') {
-      if (currentTables.has(field.fieldType)) {
+      if (currentModels.has(field.fieldType)) {
         return true;
       }
     }
@@ -162,6 +162,17 @@ function tablesFromSchema(schema: Schema): Map<string, Model> {
   }
 
   return tables;
+}
+
+function modelsFromSchema(schema: Schema): Map<string, Model> {
+  const models = new Map();
+  for (const block of schema.list) {
+    if (block.type === 'model') {
+      models.set(block.name, block);
+    }
+  }
+
+  return models;
 }
 
 type Diff<T> = {
