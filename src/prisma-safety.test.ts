@@ -85,6 +85,41 @@ describe('prisma safety', () => {
     });
 
     describe('safe', () => {
+      it('allows deleting relation', () => {
+        const prev = getSchema(`
+        model Foo {
+          qid String @id
+          bar String @map(name: "bar") @ignore
+          bars Bar[]
+
+          @@map(name: "foo_tbl")
+        }
+
+        model Bar {
+          qid String @id
+          fooQid String @map(name: "foo_qid")
+          foo Foo @relation(fields: [fooQid], references: [qid])
+
+          @@map(name: "bar_tbl")
+        }
+        `);
+        const current = getSchema(`
+        model Foo {
+          qid String @id
+          bar String @map(name: "bar") @ignore
+
+          @@map(name: "foo_tbl")
+        }
+
+        model Bar {
+          qid String @id
+          fooQid String @map(name: "foo_qid")
+
+          @@map(name: "bar_tbl")
+        }
+        `);
+        expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+      });
       it('allows deleting field that was marked as ignored', () => {
         const prev = getSchema(`model Foo {
           qid String @id
