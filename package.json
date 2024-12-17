@@ -54,5 +54,8 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
+  "resolutions": {
+    "cross-spawn": "^7.0.5"
+  },
   "packageManager": "yarn@4.1.1"
 }
