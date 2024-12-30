@@ -44,7 +44,7 @@
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.5.5",
-    "eslint-plugin-canonical": "^4.9.0",
+    "eslint-plugin-canonical": "^5.1.2",
     "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-jest": "^28.2.0",
     "husky": "^9.0.6",
