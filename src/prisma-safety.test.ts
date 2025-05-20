@@ -253,5 +253,76 @@ describe('prisma safety', () => {
         expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
       });
     });
+    it('disallows ignored field to be non-optional', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String 
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String @ignore 
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(1);
+    });
+
+    it('allows newly ignored field to be optional', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String? @ignore
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+    });
+
+    it('allows newly ignored field to have a default', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String @ignore @default("test")
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+    });
+
+    it('allows already ignored field to be optional', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String? @ignore
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String? @ignore
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+    });
+
+    it('allows already ignored field to have a default', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String @ignore @default("test")
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String @ignore @default("test")
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+    });
+
+    it('allows field to transition from ignored to not ignored', () => {
+      const prev = getSchema(`model Foo {
+        qid String @id
+        bar String @ignore
+      }`);
+      const current = getSchema(`model Foo {
+        qid String @id
+        bar String
+      }`);
+      expect(listSafetyIssuesBasedOnSchemas(prev, current).length).toBe(0);
+    });
   });
 });

@@ -119,6 +119,24 @@ export function listSafetyIssuesBasedOnSchemas(
         }),
       );
 
+      issues.push(
+        ...fieldChanges.ignored.flatMap((field): SafetyIssue[] => {
+          if (
+            !field.optional &&
+            !field.attributes?.find((a: any) => a.name === 'default')
+          ) {
+            return [
+              {
+                model: current.name,
+                field: field.name,
+                message:
+                  'Expected ignored field to be optional or have a default value.',
+              },
+            ];
+          }
+          return [];
+        }),
+      );
       return issues;
     }),
   );
@@ -182,6 +200,7 @@ type Diff<T> = {
     prev: T;
     current: T;
   }>;
+  ignored: Array<T>;
 };
 
 function diffModels(
@@ -215,19 +234,29 @@ function diffModelFields(
   return diffMaps(previousFields, currentFields);
 }
 
-function diffMaps<T>(
+function diffMaps<T extends Field | Model>(
   previousMap: Map<string, T>,
   currentMap: Map<string, T>,
 ): Diff<T> {
-  const added = [];
-  const deleted = [];
-  const remaining = [];
+  const added: T[] = [];
+  const deleted: T[] = [];
+  const remaining: { prev: T; current: T }[] = [];
+  const ignored: T[] = [];
 
   const currentKeys = new Set(currentMap.keys());
 
   for (const [name, model] of previousMap) {
     const current = currentMap.get(name);
     if (current) {
+      // Field is newly ignored
+      if (
+        current.type === 'field' &&
+        current.attributes?.find((a) => a.name === 'ignore') &&
+        model.type === 'field' &&
+        !model.attributes?.find((a) => a.name === 'ignore')
+      ) {
+        ignored.push(current);
+      }
       remaining.push({
         prev: model,
         current,
@@ -249,6 +278,7 @@ function diffMaps<T>(
     added,
     deleted,
     remaining,
+    ignored,
   };
 }
 
