@@ -6,7 +6,6 @@ A safe schema change checker for Prisma. Errors if a model is deleted without pr
 
 <https://github.com/prisma/prisma/discussions/13922>
 
-
 ## Installation
 
 ```sh
