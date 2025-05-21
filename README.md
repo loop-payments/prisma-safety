@@ -6,6 +6,7 @@ A safe schema change checker for Prisma. Errors if a model is deleted without pr
 
 <https://github.com/prisma/prisma/discussions/13922>
 
+
 ## Installation
 
 ```sh
@@ -57,3 +58,10 @@ jobs:
           git fetch origin ${{ github.base_ref }}
           yarn prisma-safety ${{ github.event.pull_request.base.sha }}
 ```
+
+## Related package
+
+You might also find value in [prisma-lint](https://github.com/loop-payments/prisma-lint). It has some safety-related rules such as [ban-unbounded-string-type](https://github.com/loop-payments/prisma-lint/blob/main/RULES.md#ban-unbounded-string-type) and [forbid-required-ignored-field](https://github.com/loop-payments/prisma-lint/blob/main/RULES.md#forbid-required-ignored-field). Guidance for what goes where:
+
+- `prisma-lint` - anything that can be linted by looking at a single Prisma schema in isolation
+- `prisma-safety` - requires the current and draft version of the Prisma schema, and looking at the diff
