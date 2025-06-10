@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.0.7 (2025-06-10)
+
+- Add support for `-p, --previous-schema <path>` as alternative to `baseSha` argument.
+
 ## 0.0.6 (2024-10-22)
 
 - Use model name instead of mapped table name (if present) for determining if field is a relation.
