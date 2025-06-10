@@ -17,10 +17,13 @@ program
   .description('A safe migration checker for Prisma schema files.')
   .option('-s, --schema <path>', 'The path to the Prisma schema file.')
   .option(
-    '-p, --previous-schema <path>',
+    '-p, --previous-schema [path]',
     'The path to the previous Prisma schema file. Alternative to the base sha argument.',
   )
-  .argument('[baseSha]', 'The baseSha to diff the current schema against. Only required if --previous-schema is not provided.');
+  .argument(
+    '[baseSha]',
+    'The baseSha to diff the current schema against. Only required if --previous-schema is not provided.',
+  );
 
 program.parse();
 
