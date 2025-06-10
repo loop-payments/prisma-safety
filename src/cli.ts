@@ -20,7 +20,7 @@ program
     '-p, --previous-schema <path>',
     'The path to the previous Prisma schema file. Alternative to the base sha argument.',
   )
-  .argument('<baseSha>', 'The baseSha to diff the current schema against. Only required if --previous-schema is not provided.');
+  .argument('[baseSha]', 'The baseSha to diff the current schema against. Only required if --previous-schema is not provided.');
 
 program.parse();
 
