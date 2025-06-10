@@ -17,7 +17,7 @@ program
   .description('A safe migration checker for Prisma schema files.')
   .option('-s, --schema <path>', 'The path to the Prisma schema file.')
   .option(
-    '-p, --previous-schema [path]',
+    '-p, --previous-schema <path>',
     'The path to the previous Prisma schema file. Alternative to the base sha argument.',
   )
   .argument(
