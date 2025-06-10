@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.0.8 (2025-06-10)
+
+- `baseSha` is now an optional argument.
+
 ## 0.0.7 (2025-06-10)
 
 - Add support for `-p, --previous-schema <path>` as alternative to `baseSha` argument.

@@ -20,7 +20,10 @@ program
     '-p, --previous-schema <path>',
     'The path to the previous Prisma schema file. Alternative to the base sha argument.',
   )
-  .argument('baseSha', 'The baseSha to diff the current schema against.');
+  .argument(
+    '[baseSha]',
+    'The baseSha to diff the current schema against. Only required if --previous-schema is not provided.',
+  );
 
 program.parse();
 
@@ -59,7 +62,7 @@ const run = async () => {
     process.exit(1);
   }
   const safetyIssues =
-    baseSha == null
+    previousSchemaPath != null
       ? await listSafetyIssuesBasedOnSchemaPaths(schemaPath, previousSchemaPath)
       : await listSafetyIssuesBasedOnSha(schemaPath, baseSha);
   if (safetyIssues.length > 0) {
