@@ -4,7 +4,7 @@ import { program } from 'commander';
 
 import { readPackageUp } from 'read-package-up';
 
-import { listSafetyIssues, renderSafetyIssues } from '#src/prisma-safety.js';
+import { listSafetyIssuesBasedOnSchemaPaths, listSafetyIssuesBasedOnSha, renderSafetyIssues } from '#src/prisma-safety.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
@@ -12,6 +12,7 @@ program
   .name('prisma-safety')
   .description('A safe migration checker for Prisma schema files.')
   .option('-s, --schema <path>', 'The path to the Prisma schema file.')
+  .option('-p, --previous-schema <path>', 'The path to the previous Prisma schema file. Alternative to the base sha argument.')
   .argument('baseSha', 'The baseSha to diff the current schema against.');
 
 program.parse();
@@ -43,7 +44,14 @@ const getSchemaPath = async () => {
 const run = async () => {
   const baseSha = args[0];
   const schemaPath = await getSchemaPath();
-  const safetyIssues = await listSafetyIssues(schemaPath, baseSha);
+  const previousSchemaPath = options.previousSchema;
+  if (baseSha == null && previousSchemaPath == null) {
+      console.error('You must provide a base SHA or a previous schema file path.');
+      process.exit(1);
+  }
+  const safetyIssues = baseSha == null ?
+    await listSafetyIssuesBasedOnSchemaPaths(schemaPath, previousSchemaPath) :
+    await listSafetyIssuesBasedOnSha(schemaPath, baseSha);
   if (safetyIssues.length > 0) {
     console.error(renderSafetyIssues(safetyIssues));
     process.exit(1);

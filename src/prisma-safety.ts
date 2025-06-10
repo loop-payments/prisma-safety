@@ -29,16 +29,14 @@ export function renderSafetyIssues(issues: SafetyIssue[]) {
     .join('\n');
 }
 
-export async function listSafetyIssues(
+export async function listSafetyIssuesBasedOnSha(
   schemaPath: string,
   baseSha: string,
 ): Promise<SafetyIssue[]> {
   const safeSha = baseSha.replace(/\W/g, '');
 
   const [currentSchema, previousSchema] = await Promise.all([
-    readFile(schemaPath, { encoding: 'utf8' }).then((content) => {
-      return getSchema(content);
-    }),
+    readFile(schemaPath, { encoding: 'utf8' }).then(getSchema),
     promisify(exec)(`git show ${safeSha}:${schemaPath}`).then(
       ({ stdout, stderr }) => {
         if (stderr !== '') {
@@ -50,6 +48,17 @@ export async function listSafetyIssues(
     ),
   ]);
 
+  return listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
+}
+
+export async function listSafetyIssuesBasedOnSchemaPaths(
+  currentPath: string,
+  previousPath: string,
+) {
+  const [currentSchema, previousSchema] = await Promise.all([
+    readFile(currentPath, { encoding: 'utf8' }).then(getSchema),
+    readFile(previousPath, { encoding: 'utf8' }).then(getSchema),
+  ]);
   return listSafetyIssuesBasedOnSchemas(previousSchema, currentSchema);
 }
 
