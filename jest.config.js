@@ -23,7 +23,10 @@ const unitTestConfig = {
     '^#src/(.*)\\.js$': '<rootDir>/src/$1',
   },
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: './tsconfig.test.json' }],
+    '^.+\\.ts$': [
+      'ts-jest',
+      { useESM: true, tsconfig: './tsconfig.test.json' },
+    ],
   },
 };
 
