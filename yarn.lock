@@ -6503,7 +6503,7 @@ __metadata:
     "@types/pluralize": "npm:^0.0.33"
     "@typescript-eslint/eslint-plugin": "npm:^8.17.0"
     "@typescript-eslint/parser": "npm:^8.1.0"
-    commander: "npm:^13.1.0"
+    commander: "npm:^14.0.2"
     eslint: "npm:^8.46.0"
     eslint-config-prettier: "npm:^10.1.1"
     eslint-import-resolver-typescript: "npm:^4.2.2"
