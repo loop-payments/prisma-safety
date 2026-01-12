@@ -4,6 +4,7 @@ import { program } from 'commander';
 
 import { readPackageUp } from 'read-package-up';
 
+import { getSchemaPathFromPrismaConfig } from '#src/prisma-config.js';
 import {
   listSafetyIssuesBasedOnSchemaPaths,
   listSafetyIssuesBasedOnSha,
@@ -37,10 +38,25 @@ const getSchemaFromPackageJson = async (cwd: string) => {
   return pkgJson?.packageJson?.prisma?.schema;
 };
 
+/**
+ * Gets the schema path from available configuration sources.
+ * Priority order:
+ * 1. CLI --schema option (highest priority)
+ * 2. prisma.config.ts (Prisma 7+)
+ * 3. package.json#prisma.schema (legacy, deprecated in Prisma 7)
+ * 4. Default prisma/schema.prisma (lowest priority)
+ */
 const getSchemaPath = async () => {
   const schemaFromOption = options.schema;
   if (schemaFromOption) {
     return schemaFromOption;
+  }
+
+  const schemaFromPrismaConfig = await getSchemaPathFromPrismaConfig(
+    process.cwd(),
+  );
+  if (schemaFromPrismaConfig) {
+    return schemaFromPrismaConfig;
   }
 
   const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());

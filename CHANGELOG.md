@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add support for `prisma.config.ts` schema path (Prisma 7+).
+
 ## 0.0.8 (2025-06-10)
 
 - `baseSha` is now an optional argument.

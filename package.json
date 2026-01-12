@@ -25,7 +25,7 @@
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
     "style:prettier": "prettier --write src",
     "style:prettier:check": "prettier --check src",
-    "test": "node ./node_modules/jest/bin/jest.js"
+    "test": "NODE_OPTIONS=--experimental-vm-modules node ./node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@mrleebo/prisma-ast": "^0.13.1",
