@@ -30,7 +30,7 @@
   "dependencies": {
     "@mrleebo/prisma-ast": "^0.13.1",
     "commander": "^13.1.0",
-    "read-package-up": "^11.0.0"
+    "read-package-up": "^12.0.0"
   },
   "devDependencies": {
     "@tsconfig/esm": "^1.0.3",
